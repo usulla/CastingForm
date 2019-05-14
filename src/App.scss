@@ -1,0 +1,179 @@
+@import './assets/styles/conf/configs';
+@import './assets/styles/mix/placeholder';
+@import './assets/styles/func/strip-unit';
+@import './assets/styles/mix/fluid-type';
+
+.cwff {
+	&-app {
+		box-sizing: border-box;
+		text-align: center;
+
+		*:not(input) {
+			box-sizing: border-box;
+		}
+
+		@media (min-width: $m) {
+			&__container {
+				display: flex;
+			}
+			&__scenery,
+			&__form {
+				flex-grow: 1;
+			}
+			&__scenery {
+				width: ((779.5 / 1680) * 100%);
+			}
+			&__form {
+				width: (100 - (779.5 / 1680) * 100%);
+			}
+		}
+	}
+	&-scenery {
+		position: relative;
+
+		&__former {
+			padding-top: (264 / 320) * 100%;
+		}
+
+		&__filler {
+			background-image: url(https://superkanal.ru/bin/apps/childrens-weather-forecast-form/cwff-scene.png);
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			bottom: 0;
+			left: 0;
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+	}
+	&-form {
+		$form: &;
+		align-items: center;
+		display: flex;
+		justify-content: center;
+		margin: 0;
+
+		&__overflow {
+			flex-grow: 1;
+			overflow: hidden;
+			padding: 23.83px 20px 33.45px; // Дизайнер наркоман
+
+			@media (min-width: $m) {
+				// max-height: 100vh;  // Для вертикального сколла в форме - Включить
+				// overflow-x: hidden; // Для вертикального сколла в форме - Включить
+				overflow-y: auto;
+			}
+		}
+
+		&__title {
+			$max-font-size: 40px;
+			$min-font-size: 24px;
+			$max-margin-bottom: 37.04px;
+			$min-margin-bottom: 12.59px;
+			color: $black;
+			font-family: $font-family;
+			font-size: $min-font-size;
+			font-style: normal;
+			font-weight: 700;
+			line-height: (25 / 24);
+			margin: 0 0 $min-margin-bottom;
+			text-align: center;
+
+			@media (min-width: $s) {
+				@include fluid-type(font-size, $s, $l, $min-font-size, $max-font-size);
+				@include fluid-type(margin-bottom, $s, $l, $min-margin-bottom, $max-margin-bottom);
+			}
+
+			@media (min-width: $l) {
+				font-size: $max-font-size;
+				margin-bottom: $max-margin-bottom;
+
+				&__container {
+					> *:last-child {
+						margin-bottom: 0;
+					}
+				}
+			}
+		}
+
+		&__subtitle {
+			$max-font-size: 18px;
+			$min-font-size: 14px;
+			$max-margin-bottom: 36px;
+			$min-margin-bottom: 40px;
+			color: $black;
+			font-family: $font-family;
+			font-size: $min-font-size;
+			font-style: normal;
+			font-weight: 400;
+			line-height: (21 / 14);
+			margin: 0 0 $min-margin-bottom;
+			text-align: center;
+
+			@media (min-width: $s) {
+				@include fluid-type(font-size, $s, $l, $min-font-size, $max-font-size);
+				@include fluid-type(margin-bottom, $s, $l, $min-margin-bottom, $max-margin-bottom);
+			}
+
+			@media (min-width: $l) {
+				font-size: $max-font-size;
+				margin-bottom: $max-margin-bottom;
+			}
+		}
+
+		&__container {
+			margin: 0 auto;
+
+			> *:last-child {
+				margin-bottom: 0;
+			}
+
+			@media (min-width: $m) {
+				max-width: 520.5px;
+			}
+		}
+
+		&__group {
+			margin-bottom: 30px;
+
+			&--upload {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: flex-start;
+				margin: 0 -8px 8px;
+
+				> * {
+					margin: 0 8px 4px;
+				}
+
+				#{$form} {
+					&__label {
+						width: 100%;
+					}
+				}
+			}
+		}
+
+		&__label {
+			$max-font-size: 16px;
+			$min-font-size: 14px;
+			color: $silver-chalice;
+			font-size: $min-font-size;
+			max-width: 100%;
+			overflow: hidden;
+			text-align: left;
+			text-overflow: ellipsis;
+			text-transform: uppercase;
+			white-space: nowrap;
+
+			@media (min-width: $s) {
+				@include fluid-type(font-size, $s, $l, $min-font-size, $max-font-size);
+			}
+
+			@media (min-width: $l) {
+				font-size: $max-font-size;
+			}
+		}
+	}
+}

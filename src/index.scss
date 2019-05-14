@@ -1,0 +1,38 @@
+@import './assets/styles/conf/configs';
+@import '~sassy-normalize/normalize';
+@import './assets/styles/mix/fonts';
+
+html { // Comment on production
+	height: 100%;
+}
+
+body {  // Comment on production
+	font-family: Roboto, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	min-height: 100%;
+}
+
+// ----------  Circe  ----------
+
+$font-name: 'Roboto';
+// $font-path: './assets/fonts/Roboto/';
+$font-path: 'https://superkanal.ru/bin/fonts/Roboto/';
+
+// @include font-face($font-name, 'Roboto Thin',           'Roboto-Thin',          '#{$font-path}Roboto-Thin',          normal, 100);
+// @include font-face($font-name, 'Roboto Thin Italic',    'Roboto-Thin-Italic',   '#{$font-path}Roboto-Thin-Italic',   italic, 100);
+
+// @include font-face($font-name, 'Roboto Light',          'Roboto-Light',         '#{$font-path}Roboto-Light',         normal, 300);
+// @include font-face($font-name, 'Roboto Light Italic',   'Roboto-Light-Italic',  '#{$font-path}Roboto-Light-Italic',  italic, 300);
+
+// @include font-face($font-name, 'Roboto Regular',        'Roboto-Regular',       '#{$font-path}Roboto-Regular',       normal, 400);
+// @include font-face($font-name, 'Roboto Italic',         'Roboto-Italic',        '#{$font-path}Roboto-Italic',        italic, 400);
+
+// @include font-face($font-name, 'Roboto Medium',         'Roboto-Medium',        '#{$font-path}Roboto-Medium',        normal, 500);
+// @include font-face($font-name, 'Roboto Medium Italic',  'Roboto-Medium-Italic', '#{$font-path}Roboto-Medium-Italic', italic, 500);
+
+// @include font-face($font-name, 'Roboto Bold',           'Roboto-Bold',          '#{$font-path}Roboto-Bold',          normal, 700);
+// @include font-face($font-name, 'Roboto Bold Italic',    'Roboto-Bold-Italic',   '#{$font-path}Roboto-Bold-Italic',   italic, 700);
+
+// @include font-face($font-name, 'Roboto Black',          'Roboto-Black',         '#{$font-path}Roboto-Black',         normal, 900);
+// @include font-face($font-name, 'Roboto Black Italic',   'Roboto-Black-Italic',  '#{$font-path}Roboto-Black-Italic',  italic, 900);
