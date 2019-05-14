@@ -1,21 +1,18 @@
-import React, { Component, createRef } from 'react'
-import './App.scss'
-import CustomizedTextField from './components/CustomizedTextField'
-import CustomizedButton from './components/CustomizedButton'
-import CustomizedSelect from './components/CustomizedSelect'
-import CustomizedUpload from './components/CustomizedUpload'
-import MenuItem from '@material-ui/core/MenuItem'
-import TextMaskCustom from './components/TextMaskCustom'
+import React, { Component, createRef } from 'react';
+import './App.scss';
+import CustomizedTextField from './components/CustomizedTextField';
+import CustomizedButton from './components/CustomizedButton';
+import CustomizedSelect from './components/CustomizedSelect';
+import CustomizedUpload from './components/CustomizedUpload';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextMaskCustom from './components/TextMaskCustom';
 
-import {
-	host_cities,
-	child_ages,
-	experience_of_filming } from './data'
+import { host_cities, child_ages, experience_of_filming } from './data';
 
 // CWFF => 'Childrens Weather Forecast Form'
 class App extends Component {
 	constructor() {
-		super()
+		super();
 		this.state = {
 			notSelectedPlaceholder: 'Не выбрано',
 
@@ -31,86 +28,119 @@ class App extends Component {
 			files: [],
 			maxFilesLength: 2,
 			formValid: false
-		}
-		this.constructor.onSelect = this.constructor.onSelect.bind(this)
-		this.constructor.onSubmit = this.constructor.onSubmit.bind(this)
-		this.constructor.onFilesChoose = this.constructor.onFilesChoose.bind(this)
-		this.constructor.onFileDelete = this.constructor.onFileDelete.bind(this)
-		this.constructor.validate = this.constructor.validate.bind(this)
-		this.constructor.onField = this.constructor.onField.bind(this)
+		};
+		this.constructor.onSelect = this.constructor.onSelect.bind(this);
+		this.constructor.onSubmit = this.constructor.onSubmit.bind(this);
+		this.constructor.onFilesChoose = this.constructor.onFilesChoose.bind(
+			this
+		);
+		this.constructor.onFileDelete = this.constructor.onFileDelete.bind(
+			this
+		);
+		this.constructor.validate = this.constructor.validate.bind(this);
+		this.constructor.onField = this.constructor.onField.bind(this);
 
-		this.formRef = createRef()
-		this.experienceOfFilmingRef = createRef() // Uncaught bug with required attribute =(
+		this.formRef = createRef();
+		this.experienceOfFilmingRef = createRef(); // Uncaught bug with required attribute =(
 	}
 	componentDidMount() {
-		const { validate } = App
-		validate()
+		const { validate } = App;
+		validate();
 	}
 	static onFileDelete(id) {
-		const { validate } = App
-		const { files } = this.state
-		this.setState({
-			files: files.filter(file => file.id !== id)
-		}, () => {
-			document.getElementById(id).value = ''
-			validate()
-		})
+		const { validate } = App;
+		const { files } = this.state;
+		this.setState(
+			{
+				files: files.filter(file => file.id !== id)
+			},
+			() => {
+				document.getElementById(id).value = '';
+				validate();
+			}
+		);
 	}
 	static onFilesChoose(e) {
-		const { validate } = App
-		const {
-			files,
-			maxFilesLength } = this.state
+		console.log(e);
 
-		let readyFiles = Array
-			.from(e.target.files)
-			.filter(file => file.type.includes('image'))
+		const { validate } = App;
+		const { files, maxFilesLength } = this.state;
 
-		readyFiles.forEach(file => file.id = e.target.id)
+		let readyFiles = Array.from(e.target.files).filter(file =>
+			file.type.includes('image')
+		);
 
-		readyFiles = files
-			.concat(readyFiles)
-			.slice(0, maxFilesLength)
+		readyFiles.forEach(file => (file.id = e.target.id));
 
-		if (readyFiles.length)
-			this.setState({files: readyFiles}, validate)
+		readyFiles = files.concat(readyFiles).slice(0, maxFilesLength);
 
+		if (readyFiles.length) this.setState({ files: readyFiles }, validate);
 	}
-	static onSubmit(/*e*/) {
-		// e.preventDefault()
+	static onSubmit(e) {
+		e.preventDefault();
+		const formElement = document.querySelector(".cwff-form");
+		const formData = new FormData(formElement);
+		
+		//send to server form data
+		fetch('https://superkanal.ru/', {
+			method: 'post',
+			body: formData
+		})
+			.then(function(response) {
+				if (response.status !== 200) {
+					console.log(
+						'Looks like there was a problem. Status Code: ' +
+							response.status
+					);
+					return;
+				}
+				response.json().then(function(data) {
+					console.log(data);
+				});
+			})
+			.catch(function(err) {
+				console.log('Fetch Error :-S', err);
+			});
 	}
 	static onSelect(e) {
-		const { validate } = App
-		const { value, name } = e.target
-		this.setState({
-			[name]: value
-		}, validate)
+		const { validate } = App;
+		const { value, name } = e.target;
+		this.setState(
+			{
+				[name]: value
+			},
+			validate
+		);
 	}
 	static onField(e) {
-		const { validate } = App
-		const { value, name } = e.target
-		this.setState({
-			[name]: value
-		}, validate)
+		const { validate } = App;
+		const { value, name } = e.target;
+		this.setState(
+			{
+				[name]: value
+			},
+			validate
+		);
 	}
 	static validate() {
-		const { formRef, experienceOfFilmingRef } = this
+		const { formRef, experienceOfFilmingRef } = this;
 
 		this.setState({
-			formValid: formRef.current.checkValidity() && experienceOfFilmingRef.current.props.value
-		})
+			formValid:
+				formRef.current.checkValidity() &&
+				experienceOfFilmingRef.current.props.value
+		});
 	}
 	render() {
-		const {
-			formRef,
-			experienceOfFilmingRef } = this
+		const { formRef, experienceOfFilmingRef } = this;
 
 		const {
 			onSelect,
 			onSubmit,
 			onField,
 			onFilesChoose,
-			onFileDelete } = App
+			onFileDelete
+		} = App;
 		const {
 			notSelectedPlaceholder,
 
@@ -125,7 +155,8 @@ class App extends Component {
 
 			files,
 			maxFilesLength,
-			formValid } = this.state
+			formValid
+		} = this.state;
 		return (
 			<div className='cwff-app'>
 				<div className='cwff-app__container'>
@@ -174,20 +205,22 @@ class App extends Component {
 									value={hostCity}
 									pattern='(?:.){1,255}'
 									required>
-									{
-										[{label: '', value: ''}, ...host_cities]
-											.map(city =>
-												<MenuItem
-													key={city.value}
-													value={city.value}>
-													{
-														city.label
-															? city.label
-															: <em>{ notSelectedPlaceholder }</em>
-													}
-												</MenuItem>
-											)
-									}
+									{[
+										{ label: '', value: '' },
+										...host_cities
+									].map(city => (
+										<MenuItem
+											key={city.value}
+											value={city.value}>
+											{city.label ? (
+												city.label
+											) : (
+												<em>
+													{notSelectedPlaceholder}
+												</em>
+											)}
+										</MenuItem>
+									))}
 								</CustomizedSelect>
 								<CustomizedTextField
 									id='child-full-name'
@@ -209,22 +242,23 @@ class App extends Component {
 									onChange={onSelect}
 									value={childAge}
 									pattern='(?:.){1,255}'
-									required
-								>
-									{
-										[{label: '', value: ''}, ...child_ages]
-											.map(age =>
-												<MenuItem
-													key={age.value}
-													value={age.value}>
-													{
-														age.label
-															? age.label
-															: <em>{ notSelectedPlaceholder }</em>
-													}
-												</MenuItem>
-											)
-									}
+									required>
+									{[
+										{ label: '', value: '' },
+										...child_ages
+									].map(age => (
+										<MenuItem
+											key={age.value}
+											value={age.value}>
+											{age.label ? (
+												age.label
+											) : (
+												<em>
+													{notSelectedPlaceholder}
+												</em>
+											)}
+										</MenuItem>
+									))}
 								</CustomizedSelect>
 								<CustomizedTextField
 									id='accompanying-full-name'
@@ -244,7 +278,7 @@ class App extends Component {
 									label='Телефон сопровождающего'
 									margin='normal'
 									InputProps={{
-										inputComponent: TextMaskCustom,
+										inputComponent: TextMaskCustom
 									}}
 									onChange={onField}
 									type='tel'
@@ -280,7 +314,8 @@ class App extends Component {
 									maxFilesLength={maxFilesLength}
 									onFilesChoose={onFilesChoose}
 									onFileDelete={onFileDelete}
-									hidden />
+									hidden
+								/>
 								<CustomizedSelect
 									id='experience-of-filming'
 									name='experienceOfFilming'
@@ -291,21 +326,23 @@ class App extends Component {
 									value={experienceOfFilming}
 									pattern='(?:.){1,255}'
 									ref={experienceOfFilmingRef}
-									required >
-									{
-										[{label: '', value: ''}, ...experience_of_filming]
-											.map(experience =>
-												<MenuItem
-													key={experience.value}
-													value={experience.value}>
-													{
-														experience.label
-															? experience.label
-															: <em>{ notSelectedPlaceholder }</em>
-													}
-												</MenuItem>
-											)
-									}
+									required>
+									{[
+										{ label: '', value: '' },
+										...experience_of_filming
+									].map(experience => (
+										<MenuItem
+											key={experience.value}
+											value={experience.value}>
+											{experience.label ? (
+												experience.label
+											) : (
+												<em>
+													{notSelectedPlaceholder}
+												</em>
+											)}
+										</MenuItem>
+									))}
 								</CustomizedSelect>
 								<CustomizedButton
 									type='submit'
@@ -321,8 +358,8 @@ class App extends Component {
 					</form>
 				</div>
 			</div>
-		)
+		);
 	}
 }
 
-export default App
+export default App;
