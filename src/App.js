@@ -5,6 +5,8 @@ import CustomizedButton from './components/CustomizedButton';
 import CustomizedSelect from './components/CustomizedSelect';
 import CustomizedUpload from './components/CustomizedUpload';
 import MenuItem from '@material-ui/core/MenuItem';
+import CustomizedSnackbar from './components/CustomizedSnackbar';
+
 import TextMaskCustom from './components/TextMaskCustom';
 
 import { host_cities, child_ages, experience_of_filming } from './data';
@@ -27,7 +29,12 @@ class App extends Component {
 
 			files: [],
 			maxFilesLength: 2,
-			formValid: false
+			formValid: false,
+			snackbar: {
+				openSnackbar: false,
+				responseStatus: 'error',
+				messageSnackbar: 'Спасибо! Ваша заявка отправлена!'
+			}
 		};
 		this.constructor.onSelect = this.constructor.onSelect.bind(this);
 		this.constructor.onSubmit = this.constructor.onSubmit.bind(this);
@@ -47,6 +54,17 @@ class App extends Component {
 		const { validate } = App;
 		validate();
 	}
+	snackbarClose = (event, reason) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+		this.setState({
+			snackbar: {
+				...this.state.snackbar,
+				openSnackbar: false
+			}
+		});
+	};
 	static onFileDelete(id) {
 		const { validate } = App;
 		const { files } = this.state;
@@ -60,6 +78,7 @@ class App extends Component {
 			}
 		);
 	}
+
 	static onFilesChoose(e) {
 		console.log(e);
 
@@ -69,20 +88,18 @@ class App extends Component {
 		let readyFiles = Array.from(e.target.files).filter(file =>
 			file.type.includes('image')
 		);
-
 		readyFiles.forEach(file => (file.id = e.target.id));
-
 		readyFiles = files.concat(readyFiles).slice(0, maxFilesLength);
 
 		if (readyFiles.length) this.setState({ files: readyFiles }, validate);
 	}
 	static onSubmit(e) {
 		e.preventDefault();
-		const formElement = document.querySelector(".cwff-form");
+		const formElement = document.querySelector('form');
 		const formData = new FormData(formElement);
-		
+		const url = window.location.href;
 		//send to server form data
-		fetch('https://superkanal.ru/', {
+		fetch(url, {
 			method: 'post',
 			body: formData
 		})
@@ -92,15 +109,42 @@ class App extends Component {
 						'Looks like there was a problem. Status Code: ' +
 							response.status
 					);
+					this.setState({
+						snackbar: {
+							...this.state.snackbar,
+							openSnackbar: true,
+							responseStatus: 'error',
+							messageSnackbar: response.status
+						}
+					});
 					return;
 				}
 				response.json().then(function(data) {
 					console.log(data);
+					this.setState({
+						snackbar: {
+							...this.state.snackbar,
+							openSnackbar: true,
+							responseStatus: 'success',
+							messageSnackbar: 'Спасибо! Ваша заявка отправлена!'
+						}
+					});
 				});
 			})
-			.catch(function(err) {
-				console.log('Fetch Error :-S', err);
-			});
+			.catch(
+				function(err) {
+					console.log('Fetch Error :-S', err);
+					this.setState({
+						snackbar: {
+							...this.state.snackbar,
+							openSnackbar: true,
+							responseStatus: 'success', // change to success
+							messageSnackbar:
+								'Попробуйте отправить заявку позже!'
+						}
+					});
+				}.bind(this)
+			);
 	}
 	static onSelect(e) {
 		const { validate } = App;
@@ -123,8 +167,9 @@ class App extends Component {
 		);
 	}
 	static validate() {
+		console.log('Validate');
 		const { formRef, experienceOfFilmingRef } = this;
-
+		console.log(formRef);
 		this.setState({
 			formValid:
 				formRef.current.checkValidity() &&
@@ -354,8 +399,14 @@ class App extends Component {
 									отправить
 								</CustomizedButton>
 							</div>
-						</div>
+						</div> 
 					</form>
+					<CustomizedSnackbar
+						open={this.state.snackbar.openSnackbar}
+						onClose={this.snackbarClose}
+						variant={this.state.snackbar.responseStatus}
+						message={this.state.snackbar.messageSnackbar}
+					/>
 				</div>
 			</div>
 		);

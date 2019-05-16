@@ -9,6 +9,7 @@
 		"prop-types": "^15.7.2",
 		"react": "^16.8.6",
 		"react-dom": "^16.8.6",
+		"react-material-ui-form-validator": "^2.0.8",
 		"react-scripts": "^2.1.8",
 		"react-text-mask": "^5.4.3",
 		"sassy-normalize": "^8.0.4"
