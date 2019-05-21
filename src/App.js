@@ -5,7 +5,7 @@ import CustomizedButton from './components/CustomizedButton';
 import CustomizedSelect from './components/CustomizedSelect';
 import CustomizedUpload from './components/CustomizedUpload';
 import MenuItem from '@material-ui/core/MenuItem';
-import CustomizedSnackbar from './components/CustomizedSnackbar';
+//import CustomizedSnackbar from './components/fCustomizedSnackbar';
 
 import TextMaskCustom from './components/TextMaskCustom';
 
@@ -80,8 +80,6 @@ class App extends Component {
 	}
 
 	static onFilesChoose(e) {
-		console.log(e);
-
 		const { validate } = App;
 		const { files, maxFilesLength } = this.state;
 
@@ -95,13 +93,14 @@ class App extends Component {
 	}
 	static onSubmit(e) {
 		e.preventDefault();
-		const formElement = document.querySelector('form');
+		const formElement = document.querySelector('.cwff-form');
 		const formData = new FormData(formElement);
-		const url = window.location.href;
+		const url = 'https://castings.superkanal.ru/swff';
 		//send to server form data
 		fetch(url, {
 			method: 'post',
-			body: formData
+			body: formData,
+			mode: 'no-cors'
 		})
 			.then(function(response) {
 				if (response.status !== 200) {
@@ -167,9 +166,7 @@ class App extends Component {
 		);
 	}
 	static validate() {
-		console.log('Validate');
 		const { formRef, experienceOfFilmingRef } = this;
-		console.log(formRef);
 		this.setState({
 			formValid:
 				formRef.current.checkValidity() &&
@@ -401,12 +398,12 @@ class App extends Component {
 							</div>
 						</div> 
 					</form>
-					<CustomizedSnackbar
+					{/*<CustomizedSnackbar
 						open={this.state.snackbar.openSnackbar}
 						onClose={this.snackbarClose}
 						variant={this.state.snackbar.responseStatus}
 						message={this.state.snackbar.messageSnackbar}
-					/>
+					/> */}
 				</div>
 			</div>
 		);
